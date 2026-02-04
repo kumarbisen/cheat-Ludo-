@@ -25,9 +25,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     SafeAreaView: {
-        height: deviceHeight,
+        flex: 1,
         width: deviceWidth,
-        justifyContent: 'center',
         alignItems: 'center'
     }
 })
