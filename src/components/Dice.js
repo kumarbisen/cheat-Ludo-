@@ -8,14 +8,13 @@ import LottieView from 'lottie-react-native';
 import DiceRoll from '../assets/animation/diceroll.json'
 import { selectDiceNo } from '../redux/reducers/gameSelectors';
 import { LinearGradient } from 'react-native-linear-gradient';
+import { enableCellSelection, enablePileSelection, updateDiceNumber, updatePlayerChance } from '../redux/reducers/gameSlice';
 
 
 
 const Dice = React.memo(({ color, rotate, player, data }) => {
 
-    const handleDicePress = () =>{
-
-    }
+    
 
     const dispatch = useDispatch();
     const currentPlayerChance = useSelector(selectCurrentPlayerChance);
@@ -25,10 +24,63 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
 
     const pileIcon = BackgroundImage.GetImage(color);
     const diceIcon = BackgroundImage.GetImage(diceNo);
-    const dalay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
     const arrowAnim = useRef(new Animated.Value(0)).current;
 
     const [diceRolling, setDiceRolling] = useState(false);
+
+    const handleDicePress = async() =>{
+        const newDiceNo = Math.floor(Math.random() * 6) +1
+        playSound('dice_roll');
+        setDiceRolling(true)
+        await delay(800);
+        dispatch(updateDiceNumber({diceNo: newDiceNo}));
+        setDiceRolling(false);
+
+        const isAnyPieceAlive = data?.findIndex(i => i.pos !=0 && i.pos !=57);
+        const isAnyPieceLocked = data?.findIndex(i => i.pos ==0);
+
+        if(isAnyPieceAlive == -1){
+            if(newDiceNo == 6){
+                dispatch(enablePileSelection({playerNo: player}));
+            }else{
+                let chancePlayer= player +1;
+                if(chancePlayer > 4){
+                    chancePlayer = 1
+                }
+                await delay(600);
+                dispatch(updatePlayerChance({chancePlayer: chancePlayer}));
+            }
+        }else{
+             const canMove = playerPieces.some(
+                pile => pile.travelCount + newDiceNo <=57 && pile.pos !=0,
+             );
+             if(
+
+                (!canMove  && newDiceNo == 6 && isAnyPieceLocked ==-1 ) ||
+                (!canMove  && newDiceNo !== 6 && isAnyPieceLocked !=-1 )||
+                (!canMove  && newDiceNo !== 6 && isAnyPieceLocked ==-1 )
+
+             ){
+                let chancePlayer= player +1;
+                if(chancePlayer > 4){
+                    chancePlayer = 1
+                }
+                  await delay(600);
+                dispatch(updatePlayerChance({chancePlayer: chancePlayer}));
+                return;
+             }
+
+             if(newDiceNo ==6){
+                dispatch(enablePileSelection({playerNo:player}))
+             }
+             dispatch(enableCellSelection({playerNo:player}))
+
+
+        }
+        
+        
+    }
 
     useEffect(() => {
         function animateArrow() {

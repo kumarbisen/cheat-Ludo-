@@ -7,6 +7,7 @@ import { selectCurrentPosition } from '../redux/reducers/gameSelectors';
 import { useCallback, useMemo } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { RFValue } from 'react-native-responsive-fontsize';
+import {handleForwardThunk }from '../redux/reducers/gameAction'
 import Pile from './Pile';
 
 const Cell =({id, color})=>{
@@ -23,7 +24,7 @@ const Cell =({id, color})=>{
     const peicesAtPosition = useMemo(() => plotedPiece.filter((item) => item.pos == id), [plotedPiece, id])
 
      const handlePress = useCallback((playerNo, pieceId) => {
-        // dispatch(handleForwardThunk(playerNo, pieceId, id));
+        dispatch(handleForwardThunk(playerNo, pieceId, id));
     }, [dispatch, id]);
 
     return(
