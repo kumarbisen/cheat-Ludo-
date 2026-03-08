@@ -15,6 +15,10 @@ import Dice from '../components/Dice';
 import { selectDiceTouch, selectPlayer1, selectPlayer2, selectPlayer3, selectPlayer4 } from '../redux/reducers/gameSelectors';
 import { Colors } from '../constants/Colors';
 import Pocket from '../components/Pocket';
+import VerticalPath from '../components/VerticalPath';
+import FourTriangles from "../components/FourTriangles"
+import HorizontalPath from "../components/HorizontalPath"
+import { Plot1Data, Plot2Data, Plot3Data, Plot4Data } from '../helpers/PlotData';
 const LudoBoardScreen = () => {
 
     const player1 = useSelector(selectPlayer1);
@@ -77,17 +81,27 @@ const LudoBoardScreen = () => {
                     <Dice color={Colors.green} player={2} data={player2} />
                     <Dice color={Colors.yellow} player={3} rotate data={player3} />
                 </View>
-        
+
                 <View style={styles.ludoBoard}>
                     <View style={styles.plotContainer}>
                         <Pocket color={Colors.green} player={2} data={player2} />
+                        <VerticalPath cells={Plot2Data} color={Colors.yellow} />
                         <Pocket color={Colors.yellow} player={3} data={player3} />
                     </View>
-                    <View style={styles.pathContainer}></View>
+                    <View style={styles.pathContainer}>
+                        <HorizontalPath cells={Plot1Data} color={Colors.green} />
+                        <FourTriangles
+                            player1={player1}
+                            player2={player2}
+                            player3={player3}
+                            player4={player4}
+                        />
+                        <HorizontalPath cells={Plot3Data} color={Colors.blue} />
+                    </View>
                     <View style={styles.plotContainer}>
                         <Pocket color={Colors.red} player={1} data={player1} />
+                        <VerticalPath cells={Plot4Data} color={Colors.red} />
                         <Pocket color={Colors.blue} player={4} data={player4} />
-                        
                     </View>
                 </View>
 
@@ -138,7 +152,7 @@ export default LudoBoardScreen;
 export const styles = StyleSheet.create({
 
     container: {
-        top:130,
+        top: 130,
         alignSelf: 'center',
         justifyContent: 'space-between',
         height: deviceHeight * 0.5,
@@ -170,20 +184,20 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 30
     },
 
-    plotContainer:{
+    plotContainer: {
         width: '100%',
         height: '40%',
         justifyContent: 'space-between',
-       flexDirection: 'row',
-       backgroundColor:'#ccc'
+        flexDirection: 'row',
+        backgroundColor: '#ccc'
     },
 
-    pathContainer:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        height:'20%',
-        width:'100%',
-        backgroundColor:'#1E5162'
+    pathContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: '20%',
+        width: '100%',
+        backgroundColor: '#1E5162'
     }
 
 

@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     dashedCircle: {
         width:25,
         height:25,
-        backgroundColor:'white',
         alignItems:'center',
         justifyContent:'center',
 
