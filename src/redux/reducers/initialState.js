@@ -41,5 +41,8 @@ export const initialState  = {
     touchDiceBlock: false,
     currentPosition: [],
     fireworks: false,
-    winner: null
+    winner: null,
+    winnersOrder: [],
+    finishedPlayer:[],
+    gameOver:false,
 }

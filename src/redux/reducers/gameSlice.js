@@ -61,12 +61,34 @@ const gameSlice = createSlice({
                     }
                 }
             }
+        },
+        // new code
+        registerWinner:(state, action)=>{
+            const playerNo = action.payload;
+            if(!state.finishedPlayer.includes(playerNo)){
+                state.winnersOrder.push(playerNo);
+                state.finishedPlayer.push(playerNo);
+            }
+        },
+        setGameOver:(state,action)=>{
+            state.gameOver = action.payload;
+        },
+        assignLastPlayer:(state)=>{
+            const allPlayers = [1,2,3,4];
+            const lastPlayer = allPlayers.find(p => !state.finishedPlayer.includes(p));
+            if(lastPlayer){
+                state.winnersOrder.push(lastPlayer);
+                state.finishedPlayer.push(lastPlayer);
+            }
+
+            state.gameOver = true;
         }
+
     }
 })
 
 export const {
-    resetGame,
+   resetGame,
     updateDiceNumber,
     enablePileSelection,
     enableCellSelection,
@@ -75,7 +97,10 @@ export const {
     updateFireworks,
     announceWinner,
     updatePlayerChance,
-    updatePlayerPieceValue
+    updatePlayerPieceValue,
+    registerWinner,
+    setGameOver,
+    assignLastPlayer
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
